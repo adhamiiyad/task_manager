@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Task Manager{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h1 class="display-6 mb-0">Dashboard</h1>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{{ url_for('projects.create_project') }}" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-plus-circle me-2" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                <path
+                    d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+            </svg>
+            Create New Project
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Your Assigned Tasks</h4>
+            </div>
+            <div class="card-body">
+                {% if current_user.assigned_tasks.count() > 0 %}
+                <div class="list-group">
+                    {% for task in current_user.assigned_tasks %}
+                    <a href="{{ url_for('tasks.view_task', task_id=task.id) }}"
+                        class="list-group-item list-group-item-action task-card status-{{ task.status }} priority-{{ task.priority }}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ task.title }}</h5>
+                            {% if task.due_date %}
+                            <small>Due: {{ task.due_date.strftime('%Y-%m-%d') }}</small>
+                            {% else %}
+                            <small>No due date</small>
+                            {% endif %}
+                        </div>
+                        <p class="mb-1">Project: {{ task.project.title }}</p>
+                        <small>
+                            {% if task.status == 'backlog' %}
+                            <span class="badge bg-secondary">Backlog</span>
+                            {% elif task.status == 'in_progress' %}
+                            <span class="badge bg-primary">In Progress</span>
+                            {% elif task.status == 'completed' %}
+                            <span class="badge bg-success">Completed</span>
+                            {% endif %}
+
+                            {% if task.priority == 'low' %}
+                            <span class="badge bg-info">Low</span>
+                            {% elif task.priority == 'medium' %}
+                            <span class="badge bg-warning">Medium</span>
+                            {% elif task.priority == 'high' %}
+                            <span class="badge bg-danger">High</span>
+                            {% endif %}
+                        </small>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
+                        class="bi bi-clipboard-check text-muted mb-3" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z" />
+                        <path
+                            d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z" />
+                        <path
+                            d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z" />
+                    </svg>
+                    <p class="text-muted">You have no assigned tasks.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>Recent Projects</h4>
+            </div>
+            <div class="card-body">
+                {% if current_user.owned_projects.count() > 0 or current_user.projects.count() > 0 %}
+                <div class="list-group">
+                    {% for project in current_user.owned_projects.order_by(Project.created_at.desc()).limit(5) %}
+                    <a href="{{ url_for('projects.view_project', project_id=project.id) }}"
+                        class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ project.title }}</h5>
+                            <span class="badge bg-primary">Owner</span>
+                        </div>
+                        <p class="mb-1">{{ project.description|truncate(100) }}</p>
+                        <small>{{ project.tasks.count() }} tasks</small>
+                    </a>
+                    {% endfor %}
+
+                    {% for project in current_user.projects if project.owner_id != current_user.id %}
+                    <a href="{{ url_for('projects.view_project', project_id=project.id) }}"
+                        class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ project.title }}</h5>
+                            <span class="badge bg-secondary">Member</span>
+                        </div>
+                        <p class="mb-1">{{ project.description|truncate(100) }}</p>
+                        <small>{{ project.tasks.count() }} tasks</small>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
+                        class="bi bi-folder-plus text-muted mb-3" viewBox="0 0 16 16">
+                        <path
+                            d="m.5 3 .04.87a1.99 1.99 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2zm5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19c-.24 0-.47.042-.683.12L1.5 2.98a1 1 0 0 1 1-.98h3.672z" />
+                        <path
+                            d="M13.5 10a.5.5 0 0 1 .5.5V12h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V13h-1.5a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z" />
+                    </svg>
+                    <p class="text-muted">You have no projects. <a href="{{ url_for('projects.create_project') }}"
+                            class="text-decoration-none">Create one now</a>.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

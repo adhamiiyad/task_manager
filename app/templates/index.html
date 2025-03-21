@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 text-center">
+        <h1 class="display-4 mb-4">Welcome to Task Manager</h1>
+        <p class="lead">Manage your projects and tasks efficiently with our simple yet powerful tool.</p>
+        {% if not current_user.is_authenticated %}
+        <div class="mt-5">
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg me-3">Sign Up</a>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg">Login</a>
+        </div>
+        {% else %}
+        <div class="mt-5">
+            <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary btn-lg">Go to Dashboard</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

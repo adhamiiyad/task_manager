@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Projects - Task Manager{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>Your Projects</h1>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{{ url_for('projects.create_project') }}" class="btn btn-primary">Create New Project</a>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3>Projects You Own</h3>
+            </div>
+            <div class="card-body">
+                {% if owned_projects %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Tasks</th>
+                                <th>Members</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for project in owned_projects %}
+                            <tr>
+                                <td><a href="{{ url_for('projects.view_project', project_id=project.id) }}">{{
+                                        project.title }}</a></td>
+                                <td>{{ project.tasks.count() }}</td>
+                                <td>{{ project.members|count }}</td>
+                                <td>{{ project.created_at.strftime('%Y-%m-%d') }}</td>
+                                <td>
+                                    <a href="{{ url_for('projects.edit_project', project_id=project.id) }}"
+                                        class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    <a href="{{ url_for('projects.manage_members', project_id=project.id) }}"
+                                        class="btn btn-sm btn-outline-info">Members</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p>You don't own any projects yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3>Projects You're Part Of</h3>
+            </div>
+            <div class="card-body">
+                {% if member_projects %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Owner</th>
+                                <th>Tasks</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for project in member_projects if project.owner_id != current_user.id %}
+                            <tr>
+                                <td><a href="{{ url_for('projects.view_project', project_id=project.id) }}">{{
+                                        project.title }}</a></td>
+                                <td>{{ project.owner.username }}</td>
+                                <td>{{ project.tasks.count() }}</td>
+                                <td>{{ project.created_at.strftime('%Y-%m-%d') }}</td>
+                                <td>
+                                    <a href="{{ url_for('projects.view_project', project_id=project.id) }}"
+                                        class="btn btn-sm btn-outline-primary">View</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p>You're not a member of any projects yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

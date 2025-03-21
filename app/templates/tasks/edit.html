@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Task - {{ task.title }} - Task Manager{% endblock %}
+
+{% block content %}
+<div class="row mb-2">
+    <div class="col-md-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('projects.list_projects') }}">Projects</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('projects.view_project', project_id=project.id) }}">{{
+                        project.title }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('tasks.view_task', task_id=task.id) }}">{{ task.title
+                        }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h2>Edit Task</h2>
+                <p class="text-muted mb-0">Project: {{ project.title }}</p>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{{ url_for('tasks.edit_task', task_id=task.id) }}">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Task Title</label>
+                        <input type="text" class="form-control" id="title" name="title" value="{{ task.title }}"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description"
+                            rows="4">{{ task.description }}</textarea>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="due_date" class="form-label">Due Date</label>
+                            <input type="date" class="form-control" id="due_date" name="due_date"
+                                value="{{ task.due_date.strftime('%Y-%m-%d') if task.due_date else '' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="priority" class="form-label">Priority</label>
+                            <select class="form-select" id="priority" name="priority">
+                                <option value="low" {% if task.priority=='low' %} selected{% endif %}>Low</option>
+                                <option value="medium" {% if task.priority=='medium' %} selected{% endif %}>Medium
+                                </option>
+                                <option value="high" {% if task.priority=='high' %} selected{% endif %}>High</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="backlog" {% if task.status=='backlog' %} selected{% endif %}>Backlog
+                                </option>
+                                <option value="in_progress" {% if task.status=='in_progress' %} selected{% endif %}>In
+                                    Progress</option>
+                                <option value="completed" {% if task.status=='completed' %} selected{% endif %}>
+                                    Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="assignee_id" class="form-label">Assign To</label>
+                        <select class="form-select" id="assignee_id" name="assignee_id">
+                            <option value="">Unassigned</option>
+                            {% for member in members %}
+                            <option value="{{ member.id }}" {% if task.assignee_id==member.id %} selected{% endif %}>{{
+                                member.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('tasks.view_task', task_id=task.id) }}"
+                            class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
