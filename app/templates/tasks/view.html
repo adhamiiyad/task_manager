@@ -104,7 +104,7 @@
                 <h3>Comments</h3>
             </div>
             <div class="card-body">
-                <!-- Add Comment Form -->
+
                 <form method="post" action="{{ url_for('tasks.add_comment', task_id=task.id) }}" class="mb-4">
                     <div class="mb-3">
                         <label for="content" class="form-label">Add a comment</label>
@@ -113,7 +113,7 @@
                     <button type="submit" class="btn btn-primary">Post Comment</button>
                 </form>
 
-                <!-- Comments List -->
+
                 <div class="comments-section">
                     {% if comments %}
                     {% for comment in comments %}
@@ -122,19 +122,19 @@
                             <div>
                                 <div class="d-flex align-items-center mb-2">
                                     {% if comment.user.profile_picture %}
-                                    <img src="data:image/jpeg;base64,{{ comment.user.profile_picture|b64encode }}" 
-                                         alt="Profile Picture" 
-                                         class="rounded-circle me-2" 
-                                         style="width: 32px; height: 32px; object-fit: cover;">
+                                    <img src="data:image/jpeg;base64,{{ comment.user.profile_picture|b64encode }}"
+                                        alt="Profile Picture" class="rounded-circle me-2"
+                                        style="width: 32px; height: 32px; object-fit: cover;">
                                     {% else %}
-                                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" 
-                                         style="width: 32px; height: 32px;">
+                                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2"
+                                        style="width: 32px; height: 32px;">
                                         <span style="font-size: 0.9rem;">{{ comment.user.username[0].upper() }}</span>
                                     </div>
                                     {% endif %}
                                     <div>
                                         <strong>{{ comment.user.username }}</strong>
-                                        <small class="text-muted ms-2">{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                        <small class="text-muted ms-2">{{ comment.created_at.strftime('%Y-%m-%d %H:%M')
+                                            }}</small>
                                     </div>
                                 </div>
                                 <div class="comment-content mb-2">
@@ -142,27 +142,54 @@
                                 </div>
                                 <div class="comment-actions">
                                     <div class="btn-group">
-                                        <form method="post" action="{{ url_for('tasks.toggle_comment_like', task_id=task.id, comment_id=comment.id) }}" class="d-inline">
+                                        <form method="post"
+                                            action="{{ url_for('tasks.toggle_comment_like', task_id=task.id, comment_id=comment.id) }}"
+                                            class="d-inline">
                                             <button type="submit" class="btn btn-sm btn-outline-primary">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart{% if comment.likes.filter_by(user_id=current_user.id).first() %}-fill{% endif %}" viewBox="0 0 16 16">
-                                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    fill="currentColor"
+                                                    class="bi bi-heart{% if comment.likes.filter_by(user_id=current_user.id).first() %}-fill{% endif %}"
+                                                    viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd"
+                                                        d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
                                                 </svg>
                                                 <span class="ms-1">{{ comment.get_likes_count() }}</span>
                                             </button>
                                         </form>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#replyForm{{ comment.id }}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reply" viewBox="0 0 16 16">
-                                                <path d="M6.598 5.013a.144.144 0 0 1 .202.134V6.3a.5.5 0 0 0 .5.5c.667 0 2.013.005 3.3.822.984.624 1.99 1.76 2.595 3.876-1.02-.983-2.185-1.5-3.743-1.5a.5.5 0 0 0 0 1c1.203 0 2.5.587 3.71 1.5a.5.5 0 0 1-.5.866c-.67-.166-1.307-.26-1.91-.26a.5.5 0 0 0 0 1c.79 0 1.5.09 2.28.26 1.216-1.137.837-2.12.676-2.195a.5.5 0 0 0-.65.062a8.457 8.457 0 0 1-1.009 1.118c-.996.608-2.296.07-2.71-1.058a.5.5 0 0 1 .18-.67a.5.5 0 0 1 .63-.062z"/>
-                                                <path d="M8.278 6.72a.5.5 0 0 1 .5.5v3.5h3.5a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5z"/>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                            data-bs-toggle="collapse" data-bs-target="#replyForm{{ comment.id }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" class="bi bi-reply" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M6.598 5.013a.144.144 0 0 1 .202.134V6.3a.5.5 0 0 0 .5.5c.667 0 2.013.005 3.3.822.984.624 1.99 1.76 2.595 3.876-1.02-.983-2.185-1.5-3.743-1.5a.5.5 0 0 0 0 1c1.203 0 2.5.587 3.71 1.5a.5.5 0 0 1-.5.866c-.67-.166-1.307-.26-1.91-.26a.5.5 0 0 0 0 1c.79 0 1.5.09 2.28.26 1.216-1.137.837-2.12.676-2.195a.5.5 0 0 0-.65.062a8.457 8.457 0 0 1-1.009 1.118c-.996.608-2.296.07-2.71-1.058a.5.5 0 0 1 .18-.67a.5.5 0 0 1 .63-.062z" />
+                                                <path
+                                                    d="M8.278 6.72a.5.5 0 0 1 .5.5v3.5h3.5a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5z" />
                                             </svg>
                                             <span class="ms-1">Reply</span>
                                         </button>
-                                        <form method="post" action="{{ url_for('tasks.toggle_comment_acknowledgment', task_id=task.id, comment_id=comment.id) }}" class="d-inline">
-                                            <button type="submit" class="btn btn-sm btn-outline-success">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle{% if comment.interactions.filter_by(user_id=current_user.id, type='got_it').first() %}-fill{% endif %}" viewBox="0 0 16 16">
-                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                        <form method="post"
+                                            action="{{ url_for('tasks.toggle_comment_acknowledgment', task_id=task.id, comment_id=comment.id) }}"
+                                            class="d-inline">
+                                            {% set acknowledgment =
+                                            comment.interactions.filter_by(type='got_it').first() %}
+                                            <button type="submit"
+                                                class="btn btn-sm {% if acknowledgment %}btn-success{% else %}btn-outline-success{% endif %}"
+                                                {% if acknowledgment and acknowledgment.user_id !=current_user.id
+                                                %}disabled{% endif %}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    fill="currentColor"
+                                                    class="bi bi-check-circle{% if acknowledgment %}-fill{% endif %}"
+                                                    viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                                                 </svg>
-                                                <span class="ms-1">Got it</span>
+                                                <span class="ms-1">
+                                                    {% if acknowledgment %}
+                                                    Got it by {{ acknowledgment.user.username }}
+                                                    {% else %}
+                                                    Got it
+                                                    {% endif %}
+                                                </span>
                                             </button>
                                         </form>
                                     </div>
@@ -170,36 +197,39 @@
                             </div>
                         </div>
 
-                        <!-- Reply Form -->
+
                         <div class="collapse mt-2" id="replyForm{{ comment.id }}">
-                            <form method="post" action="{{ url_for('tasks.add_reply', task_id=task.id, comment_id=comment.id) }}" class="ms-4">
+                            <form method="post"
+                                action="{{ url_for('tasks.add_reply', task_id=task.id, comment_id=comment.id) }}"
+                                class="ms-4">
                                 <div class="mb-3">
-                                    <textarea class="form-control" name="content" rows="2" placeholder="Write a reply..." required></textarea>
+                                    <textarea class="form-control" name="content" rows="2"
+                                        placeholder="Write a reply..." required></textarea>
                                 </div>
                                 <button type="submit" class="btn btn-sm btn-primary">Post Reply</button>
                             </form>
                         </div>
 
-                        <!-- Replies -->
+
                         {% if comment.replies.count() > 0 %}
                         <div class="ms-4 mt-2">
                             {% for reply in comment.replies %}
                             <div class="reply mb-2">
                                 <div class="d-flex align-items-center mb-1">
                                     {% if reply.user.profile_picture %}
-                                    <img src="data:image/jpeg;base64,{{ reply.user.profile_picture|b64encode }}" 
-                                         alt="Profile Picture" 
-                                         class="rounded-circle me-2" 
-                                         style="width: 24px; height: 24px; object-fit: cover;">
+                                    <img src="data:image/jpeg;base64,{{ reply.user.profile_picture|b64encode }}"
+                                        alt="Profile Picture" class="rounded-circle me-2"
+                                        style="width: 24px; height: 24px; object-fit: cover;">
                                     {% else %}
-                                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" 
-                                         style="width: 24px; height: 24px;">
+                                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2"
+                                        style="width: 24px; height: 24px;">
                                         <span style="font-size: 0.8rem;">{{ reply.user.username[0].upper() }}</span>
                                     </div>
                                     {% endif %}
                                     <div>
                                         <strong>{{ reply.user.username }}</strong>
-                                        <small class="text-muted ms-2">{{ reply.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                        <small class="text-muted ms-2">{{ reply.created_at.strftime('%Y-%m-%d %H:%M')
+                                            }}</small>
                                     </div>
                                 </div>
                                 <div class="reply-content">

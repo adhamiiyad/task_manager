@@ -8,38 +8,42 @@
         <div class="card mb-4">
             <div class="card-body text-center">
                 {% if user.profile_picture %}
-                <img src="data:image/jpeg;base64,{{ user.profile_picture|b64encode }}" 
-                     alt="Profile Picture" 
-                     class="rounded-circle mb-3" 
-                     style="width: 150px; height: 150px; object-fit: cover;">
+                <img src="data:image/jpeg;base64,{{ user.profile_picture|b64encode }}" alt="Profile Picture"
+                    class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
                 {% else %}
-                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto mb-3" 
-                     style="width: 150px; height: 150px;">
+                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto mb-3"
+                    style="width: 150px; height: 150px;">
                     <span style="font-size: 4rem;">{{ user.username[0].upper() }}</span>
                 </div>
                 {% endif %}
-                
+
                 <h3>{{ user.full_name or user.username }}</h3>
                 <p class="text-muted">@{{ user.username }}</p>
-                
+
                 {% if user.bio %}
                 <p class="text-muted">{{ user.bio }}</p>
                 {% endif %}
-                
+
                 {% if user == current_user %}
                 <a href="{{ url_for('users.edit_profile') }}" class="btn btn-outline-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square me-2" viewBox="0 0 16 16">
-                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-pencil-square me-2" viewBox="0 0 16 16">
+                        <path
+                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                        <path fill-rule="evenodd"
+                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                     </svg>
                     Edit Profile
                 </a>
                 {% elif can_send_request %}
                 <form method="POST" action="{{ url_for('users.send_friend_request', user_id=user.id) }}">
                     <button type="submit" class="btn btn-primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus me-2" viewBox="0 0 16 16">
-                            <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-                            <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-person-plus me-2" viewBox="0 0 16 16">
+                            <path
+                                d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                            <path fill-rule="evenodd"
+                                d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
                         </svg>
                         Add Friend
                     </button>
@@ -57,15 +61,14 @@
             <div class="card-body">
                 <form method="POST" action="{{ url_for('users.add_friend_by_username') }}" class="mb-0">
                     <div class="input-group">
-                        <input type="text" 
-                               name="username" 
-                               class="form-control" 
-                               placeholder="Enter username" 
-                               required>
+                        <input type="text" name="username" class="form-control" placeholder="Enter username" required>
                         <button type="submit" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus me-1" viewBox="0 0 16 16">
-                                <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-                                <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-person-plus me-1" viewBox="0 0 16 16">
+                                <path
+                                    d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                                <path fill-rule="evenodd"
+                                    d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
                             </svg>
                             Add
                         </button>
@@ -86,13 +89,12 @@
                     <div class="list-group-item">
                         <div class="d-flex align-items-center">
                             {% if request.sender.profile_picture %}
-                            <img src="data:image/jpeg;base64,{{ request.sender.profile_picture|b64encode }}" 
-                                 alt="Profile Picture" 
-                                 class="rounded-circle me-2" 
-                                 style="width: 40px; height: 40px; object-fit: cover;">
+                            <img src="data:image/jpeg;base64,{{ request.sender.profile_picture|b64encode }}"
+                                alt="Profile Picture" class="rounded-circle me-2"
+                                style="width: 40px; height: 40px; object-fit: cover;">
                             {% else %}
-                            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" 
-                                 style="width: 40px; height: 40px;">
+                            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2"
+                                style="width: 40px; height: 40px;">
                                 <span>{{ request.sender.username[0].upper() }}</span>
                             </div>
                             {% endif %}
@@ -101,10 +103,14 @@
                                 <small class="text-muted">{{ request.created_at.strftime('%Y-%m-%d') }}</small>
                             </div>
                             <div class="btn-group">
-                                <form method="POST" action="{{ url_for('users.handle_friend_request', request_id=request.id, action='accept') }}" class="d-inline">
+                                <form method="POST"
+                                    action="{{ url_for('users.handle_friend_request', request_id=request.id, action='accept') }}"
+                                    class="d-inline">
                                     <button type="submit" class="btn btn-sm btn-success">Accept</button>
                                 </form>
-                                <form method="POST" action="{{ url_for('users.handle_friend_request', request_id=request.id, action='reject') }}" class="d-inline">
+                                <form method="POST"
+                                    action="{{ url_for('users.handle_friend_request', request_id=request.id, action='reject') }}"
+                                    class="d-inline">
                                     <button type="submit" class="btn btn-sm btn-outline-danger">Reject</button>
                                 </form>
                             </div>
@@ -126,16 +132,16 @@
                 {% if friends %}
                 <div class="list-group">
                     {% for friend in friends %}
-                    <a href="{{ url_for('users.profile', username=friend.username) }}" class="list-group-item list-group-item-action">
+                    <a href="{{ url_for('users.profile', username=friend.username) }}"
+                        class="list-group-item list-group-item-action">
                         <div class="d-flex align-items-center">
                             {% if friend.profile_picture %}
-                            <img src="data:image/jpeg;base64,{{ friend.profile_picture|b64encode }}" 
-                                 alt="Profile Picture" 
-                                 class="rounded-circle me-2" 
-                                 style="width: 40px; height: 40px; object-fit: cover;">
+                            <img src="data:image/jpeg;base64,{{ friend.profile_picture|b64encode }}"
+                                alt="Profile Picture" class="rounded-circle me-2"
+                                style="width: 40px; height: 40px; object-fit: cover;">
                             {% else %}
-                            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" 
-                                 style="width: 40px; height: 40px;">
+                            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2"
+                                style="width: 40px; height: 40px;">
                                 <span>{{ friend.username[0].upper() }}</span>
                             </div>
                             {% endif %}
@@ -153,7 +159,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-8">
         <!-- Projects Section -->
         <div class="card">
@@ -163,20 +169,25 @@
             <div class="card-body">
                 <ul class="nav nav-tabs mb-3" id="projectTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="owned-tab" data-bs-toggle="tab" data-bs-target="#owned" type="button" role="tab" aria-controls="owned" aria-selected="true">Projects {% if user == current_user %}I Own{% else %}They Own{% endif %}</button>
+                        <button class="nav-link active" id="owned-tab" data-bs-toggle="tab" data-bs-target="#owned"
+                            type="button" role="tab" aria-controls="owned" aria-selected="true">Projects {% if user ==
+                            current_user %}I Own{% else %}They Own{% endif %}</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="member-tab" data-bs-toggle="tab" data-bs-target="#member" type="button" role="tab" aria-controls="member" aria-selected="false">Projects {% if user == current_user %}I'm{% else %}They're{% endif %} In</button>
+                        <button class="nav-link" id="member-tab" data-bs-toggle="tab" data-bs-target="#member"
+                            type="button" role="tab" aria-controls="member" aria-selected="false">Projects {% if user ==
+                            current_user %}I'm{% else %}They're{% endif %} In</button>
                     </li>
                 </ul>
-                
+
                 <div class="tab-content" id="projectTabsContent">
                     <!-- Owned Projects -->
                     <div class="tab-pane fade show active" id="owned" role="tabpanel" aria-labelledby="owned-tab">
                         {% if owned_projects %}
                         <div class="list-group">
                             {% for project in owned_projects %}
-                            <a href="{{ url_for('projects.view_project', project_id=project.id) }}" class="list-group-item list-group-item-action">
+                            <a href="{{ url_for('projects.view_project', project_id=project.id) }}"
+                                class="list-group-item list-group-item-action">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1">{{ project.title }}</h5>
                                     <span class="badge bg-primary">Owner</span>
@@ -187,16 +198,18 @@
                             {% endfor %}
                         </div>
                         {% else %}
-                        <p class="text-muted">{% if user == current_user %}You haven't{% else %}{{ user.username }} hasn't{% endif %} created any projects yet.</p>
+                        <p class="text-muted">{% if user == current_user %}You haven't{% else %}{{ user.username }}
+                            hasn't{% endif %} created any projects yet.</p>
                         {% endif %}
                     </div>
-                    
+
                     <!-- Member Projects -->
                     <div class="tab-pane fade" id="member" role="tabpanel" aria-labelledby="member-tab">
                         {% if member_projects %}
                         <div class="list-group">
                             {% for project_data in member_projects %}
-                            <a href="{{ url_for('projects.view_project', project_id=project_data.project.id) }}" class="list-group-item list-group-item-action">
+                            <a href="{{ url_for('projects.view_project', project_id=project_data.project.id) }}"
+                                class="list-group-item list-group-item-action">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1">{{ project_data.project.title }}</h5>
                                     <span class="badge bg-secondary">{{ project_data.role.name }}</span>
@@ -207,7 +220,8 @@
                             {% endfor %}
                         </div>
                         {% else %}
-                        <p class="text-muted">{% if user == current_user %}You're{% else %}{{ user.username }} is{% endif %} not a member of any projects yet.</p>
+                        <p class="text-muted">{% if user == current_user %}You're{% else %}{{ user.username }} is{%
+                            endif %} not a member of any projects yet.</p>
                         {% endif %}
                     </div>
                 </div>
@@ -215,4 +229,4 @@
         </div>
     </div>
 </div>
-{% endblock %} 
+{% endblock %}

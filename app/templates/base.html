@@ -33,47 +33,55 @@
                 <ul class="navbar-nav">
                     {% if current_user.is_authenticated %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link position-relative" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
-                                <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+                        <a class="nav-link position-relative" href="#" id="notificationsDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                class="bi bi-bell" viewBox="0 0 16 16">
+                                <path
+                                    d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z" />
                             </svg>
                             {% if current_user.get_unread_notifications_count() > 0 %}
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                 {{ current_user.get_unread_notifications_count() }}
                             </span>
                             {% endif %}
                         </a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown" style="min-width: 300px;">
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown"
+                            style="min-width: 300px;">
                             <h6 class="dropdown-header">Notifications</h6>
-                            {% set notifications = current_user.notifications.order_by(Notification.created_at.desc()).limit(5).all() %}
+                            {% set notifications =
+                            current_user.notifications.order_by(Notification.created_at.desc()).limit(5).all() %}
                             {% if notifications %}
-                                {% for notification in notifications %}
-                                <a class="dropdown-item {% if not notification.is_read %}fw-bold{% endif %}" href="{{ notification.link }}">
-                                    {{ notification.message }}
-                                    <br>
-                                    <small class="text-muted">{{ notification.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
-                                </a>
-                                {% if not loop.last %}
-                                <div class="dropdown-divider"></div>
-                                {% endif %}
-                                {% endfor %}
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item text-center" href="{{ url_for('users.notifications') }}">View all notifications</a>
+                            {% for notification in notifications %}
+                            <a class="dropdown-item {% if not notification.is_read %}fw-bold{% endif %}"
+                                href="{{ notification.link }}">
+                                {{ notification.message }}
+                                <br>
+                                <small class="text-muted">{{ notification.created_at.strftime('%Y-%m-%d %H:%M')
+                                    }}</small>
+                            </a>
+                            {% if not loop.last %}
+                            <div class="dropdown-divider"></div>
+                            {% endif %}
+                            {% endfor %}
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-center" href="{{ url_for('users.notifications') }}">View all
+                                notifications</a>
                             {% else %}
-                                <div class="dropdown-item text-muted">No notifications</div>
+                            <div class="dropdown-item text-muted">No notifications</div>
                             {% endif %}
                         </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('users.profile') }}">
                             {% if current_user.profile_picture %}
-                            <img src="data:image/jpeg;base64,{{ current_user.profile_picture|b64encode }}" 
-                                 alt="Profile" 
-                                 class="rounded-circle me-2" 
-                                 style="width: 24px; height: 24px; object-fit: cover;">
+                            <img src="data:image/jpeg;base64,{{ current_user.profile_picture|b64encode }}" alt="Profile"
+                                class="rounded-circle me-2" style="width: 24px; height: 24px; object-fit: cover;">
                             {% else %}
-                            <span class="rounded-circle bg-secondary text-white d-inline-flex align-items-center justify-content-center me-2" 
-                                  style="width: 24px; height: 24px; font-size: 0.8rem;">
+                            <span
+                                class="rounded-circle bg-secondary text-white d-inline-flex align-items-center justify-content-center me-2"
+                                style="width: 24px; height: 24px; font-size: 0.8rem;">
                                 {{ current_user.username[0].upper() }}
                             </span>
                             {% endif %}

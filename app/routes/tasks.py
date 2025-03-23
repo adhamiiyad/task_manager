@@ -209,8 +209,11 @@ def toggle_comment_like(task_id, comment_id):
     ).first()
     
     if existing_like:
-        db.session.delete(existing_like)
+        # User can only remove their own like
+        if existing_like.user_id == current_user.id:
+            db.session.delete(existing_like)
     else:
+        # Add new like if user hasn't liked the comment
         new_like = CommentLike(user_id=current_user.id, comment_id=comment_id)
         db.session.add(new_like)
     
@@ -255,16 +258,21 @@ def toggle_comment_acknowledgment(task_id, comment_id):
     if comment.task_id != task.id:
         abort(404)
     
-    # Check if user already acknowledged the comment
+    # Check if any user has already acknowledged the comment
     existing_interaction = CommentInteraction.query.filter_by(
-        user_id=current_user.id,
         comment_id=comment_id,
         type='got_it'
     ).first()
     
     if existing_interaction:
-        db.session.delete(existing_interaction)
+        # If the current user is the one who acknowledged it, allow them to remove it
+        if existing_interaction.user_id == current_user.id:
+            db.session.delete(existing_interaction)
+        else:
+            flash('This comment has already been acknowledged by another user.', 'info')
+            return redirect(url_for('tasks.view_task', task_id=task_id))
     else:
+        # Add new acknowledgment if no one has acknowledged it yet
         new_interaction = CommentInteraction(
             user_id=current_user.id,
             comment_id=comment_id,
