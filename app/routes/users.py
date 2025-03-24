@@ -180,4 +180,31 @@ def add_friend_by_username():
         
     success, message = current_user.send_friend_request(user)
     flash(message, 'success' if success else 'error')
+    return redirect(url_for('users.profile'))
+
+@bp.route("/remove_friend/<int:user_id>", methods=["GET"])
+@login_required
+def remove_friend(user_id):
+    user = User.query.get_or_404(user_id)
+    
+    friendship = Friendship.query.filter(
+        ((Friendship.user_id == current_user.id) & (Friendship.friend_id == user.id)) |
+        ((Friendship.user_id == user.id) & (Friendship.friend_id == current_user.id))
+    ).first()
+    
+    if friendship and friendship.status == 'accepted':
+        notification = Notification(
+            user_id=user.id,
+            type='friend_removed',
+            message=f"{current_user.username} has removed you from their friends list"
+        )
+        db.session.add(notification)
+        
+        db.session.delete(friendship)
+        db.session.commit()
+        
+        flash('Friend removed successfully.', 'success')
+    else:
+        flash('Friend not found or already removed.', 'error')
+    
     return redirect(url_for('users.profile')) 

@@ -18,48 +18,52 @@
 
 <div class="row mb-4">
     <div class="col-md-8">
-        <h1>{{ task.title }}</h1>
-
-        <div class="mb-3">
-            {% if task.status == 'backlog' %}
-            <span class="badge bg-secondary">Backlog</span>
-            {% elif task.status == 'in_progress' %}
-            <span class="badge bg-primary">In Progress</span>
-            {% elif task.status == 'completed' %}
-            <span class="badge bg-success">Completed</span>
-            {% endif %}
-
-            {% if task.priority == 'low' %}
-            <span class="badge bg-info">Low Priority</span>
-            {% elif task.priority == 'medium' %}
-            <span class="badge bg-warning">Medium Priority</span>
-            {% elif task.priority == 'high' %}
-            <span class="badge bg-danger">High Priority</span>
-            {% endif %}
-
-            {% if task.due_date %}
-            <span class="badge bg-dark">Due {{ task.due_date.strftime('%Y-%m-%d') }}</span>
-            {% endif %}
-        </div>
-
-        <p class="text-muted">Created on {{ task.created_at.strftime('%Y-%m-%d') }}</p>
-
-        {% if task.assignee %}
-        <p><strong>Assigned to:</strong> {{ task.assignee.username }}</p>
-        {% else %}
-        <p><strong>Assigned to:</strong> Unassigned</p>
-        {% endif %}
-
-        <div class="card mb-4">
-            <div class="card-header">
-                <h4>Description</h4>
-            </div>
+        <div class="card task-card" data-priority="{{ task.priority }}">
             <div class="card-body">
-                {% if task.description %}
-                <p>{{ task.description }}</p>
+                <h1>{{ task.title }}</h1>
+
+                <div class="mb-3">
+                    {% if task.status == 'backlog' %}
+                    <span class="badge bg-secondary">Backlog</span>
+                    {% elif task.status == 'in_progress' %}
+                    <span class="badge bg-primary">In Progress</span>
+                    {% elif task.status == 'completed' %}
+                    <span class="badge bg-success">Completed</span>
+                    {% endif %}
+
+                    {% if task.priority == 'low' %}
+                    <span class="badge bg-info">Low Priority</span>
+                    {% elif task.priority == 'medium' %}
+                    <span class="badge bg-warning">Medium Priority</span>
+                    {% elif task.priority == 'high' %}
+                    <span class="badge bg-danger">High Priority</span>
+                    {% endif %}
+
+                    {% if task.due_date %}
+                    <span class="badge bg-dark">Due {{ task.due_date.strftime('%Y-%m-%d') }}</span>
+                    {% endif %}
+                </div>
+
+                <p class="text-muted">Created on {{ task.created_at.strftime('%Y-%m-%d') }}</p>
+
+                {% if task.assignee %}
+                <p><strong>Assigned to:</strong> {{ task.assignee.username }}</p>
                 {% else %}
-                <p class="text-muted">No description provided.</p>
+                <p><strong>Assigned to:</strong> Unassigned</p>
                 {% endif %}
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Description</h4>
+                    </div>
+                    <div class="card-body">
+                        {% if task.description %}
+                        <p>{{ task.description }}</p>
+                        {% else %}
+                        <p class="text-muted">No description provided.</p>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

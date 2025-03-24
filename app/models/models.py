@@ -216,6 +216,9 @@ class CommentInteraction(db.Model):
     type = db.Column(db.String(20), nullable=False)  # e.g., 'got_it'
     created_at = db.Column(db.DateTime, default=datetime.datetime.now(datetime.timezone.utc))
     
+    # Relationships
+    user = db.relationship('User', backref=db.backref('comment_interactions', lazy='dynamic'))
+    
     # Ensure a user can only have one interaction of each type per comment
     __table_args__ = (db.UniqueConstraint('user_id', 'comment_id', 'type', name='unique_comment_interaction'),)
 
